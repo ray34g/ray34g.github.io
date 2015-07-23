@@ -1,0 +1,17 @@
+# Hugo
+public/
+assets/jsconfig.json
+exampleSite/resources/
+exampleSite/.hugo_build.lock
+themes/*
+
+# Temporary lock file while building
+.hugo_build.lock
+
+# Netlify Functions build output
+package-lock.json
+functions/
+node_modules/
+
+# General
+.DS_Store
