@@ -1,43 +1,17 @@
-# Windows image file caches
-Thumbs.db
-ehthumbs.db
+# Hugo
+public/
+assets/jsconfig.json
+exampleSite/resources/
+exampleSite/.hugo_build.lock
+themes/*
 
-# Folder config file
-Desktop.ini
+# Temporary lock file while building
+.hugo_build.lock
 
-# Recycle Bin used on file shares
-$RECYCLE.BIN/
+# Netlify Functions build output
+package-lock.json
+functions/
+node_modules/
 
-# Windows Installer files
-*.cab
-*.msi
-*.msm
-*.msp
-
-# Windows shortcuts
-*.lnk
-
-# =========================
-# Operating System Files
-# =========================
-
-# OSX
-# =========================
-
+# General
 .DS_Store
-.AppleDouble
-.LSOverride
-
-# Thumbnails
-._*
-
-# Files that might appear on external disk
-.Spotlight-V100
-.Trashes
-
-# Directories potentially created on remote AFP share
-.AppleDB
-.AppleDesktop
-Network Trash Folder
-Temporary Items
-.apdisk
