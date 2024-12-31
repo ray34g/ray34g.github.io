@@ -1,8 +1,5 @@
 # Hugo
-public/
-assets/jsconfig.json
-exampleSite/resources/
-exampleSite/.hugo_build.lock
+exampleSite/
 themes/*
 
 # Temporary lock file while building
