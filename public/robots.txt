@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: //www.ray34g.com/sitemap.xml
