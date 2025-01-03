@@ -24,6 +24,8 @@ posts = "/:section/:year/:month/:slug/"
 date = ["date", "publishDate", ":git", "lastmod"]
 lastmod = ["lastmod", ":git", "date", "publishDate", ":fileModTime"]
 
+[taxonomies]
+
 [sitemap]
 changefreq = "monthly"
 filename = "sitemap.xml"

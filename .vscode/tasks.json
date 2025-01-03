@@ -1,0 +1,99 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "hugo: Start Server",
+            "type": "shell",
+            "command": "hugo",
+            "args": [
+                "serve",
+                "--renderToMemory",
+                "--disableFastRender",
+                "--ignoreCache",
+                "--noHTTPCache",
+                "--bind='0.0.0.0'",
+                "--port='1313'",
+                "--appendPort=true",
+                "--liveReloadPort='1313'",
+                "--watch=true",
+                "--poll=700",
+                "--navigateToChanged",
+                "--environment='development'",
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "owner": "hugo",
+                    "fileLocation": "absolute",
+                    "pattern": {
+                        "regexp": "^(Error):.*\"(.*?):(\\d*):(\\d*)\": (.*)",
+                        "severity": 1,
+                        "file": 2,
+                        "line": 3,
+                        "column": 4,
+                        "message": 5,
+                    },
+                    "background": {
+                        "activeOnStart": false,
+                        "beginsPattern": "^Start building .*",
+                        "endsPattern": "^", /*Dont match anything*/
+                    }
+                },{
+                    "owner": "hugo",
+                    "fileLocation": "absolute",
+                    "pattern": {
+                        "regexp": "^(ERROR).*\"(.*?):(\\d*):(\\d*)\": (.*)",
+                        "severity": 1,
+                        "file": 2,
+                        "line": 3,
+                        "column": 4,
+                        "message": 5,
+                        "loop": true,
+                    },
+                    "background": {
+                        "activeOnStart": false,
+                        "beginsPattern": "Change detected.*",
+                        "endsPattern": "Total in .*",
+                    }
+                }
+            ],
+        },
+        {
+            "label": "hugo: Stop Server",
+            "type": "shell",
+            "command": "pkill",
+            "args": [
+                "hugo",
+            ]
+        },
+        {
+            "label": "hugo: Build",
+            "type": "shell",
+            "command": "hugo",
+            "args": [
+                "--gc",
+                "--minify",
+                "--cleanDestinationDir",
+                "--environment=production",
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "isBackground": true,
+            "problemMatcher": []
+        },
+    ]
+}
