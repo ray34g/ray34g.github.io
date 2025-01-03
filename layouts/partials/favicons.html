@@ -1,0 +1,48 @@
+{{ $favicon := resources.Get (.Params.favicons.favicon | default "/images/favicon.ico") }}
+{{ $faviconSVG := resources.Get (.Params.favicons.faviconSVG | default "/images/icon.svg") }}
+{{ $favicon16x16 := resources.Get (.Params.favicons.favicon16x16 | default "/images/favicon-16x16.png") }}
+{{ $favicon32x32 := resources.Get (.Params.favicons.favicon32x32 | default "/images/favicon-32x32.png") }}
+{{ $favicon512x512 := resources.Get (.Params.favicons.favicon512x512 | default "/images/android-chrome-512x512.png") }}
+{{ $favicon192x192 := resources.Get (.Params.favicons.favicon192x192 | default "/images/android-chrome-192x192.png") }}
+{{ $favicon512x512 := resources.Get (.Params.favicons.favicon512x512 | default "/images/android-chrome-512x512.png") }}
+{{ $faviconAppleTouch := resources.Get (.Params.favicons.faviconAppleTouch | default "/images/apple-touch-icon.png") }}
+
+{{ with $faviconSVG -}}
+<link rel="icon" href="{{ $favicon.RelPermalink | relURL }}">
+{{- else -}}
+<link rel="icon" href="/favicon.ico">
+{{- end }}<!--  32x32 and 16x16 -->
+
+{{ with $faviconSVG -}}
+<link rel="icon" href="/images/icon.svg" type="{{ .MediaType }}">
+{{- end }}<!-- any sizes -->
+
+{{ with $favicon16x16 -}}
+<link rel="icon" href="{{ .RelPermalink | relURL }}" type="{{ .MediaType }}" sizes="16x16">
+{{- else -}}
+<link rel="icon" href="{{ "favicon-16x16.png" | relURL }}" type="image/png" sizes="16x16" />
+{{- end }}
+
+{{ with $favicon32x32 -}}
+<link rel="icon" href="{{ .RelPermalink | relURL }}" type="{{ .MediaType }}" sizes="32x32">
+{{- else -}}
+<link rel="icon" href="{{ "favicon-32x32.png" | relURL }}" type="image/png" sizes="32x32" />
+{{- end }}
+
+{{ with $favicon192x192 -}}
+<link rel="icon" href="{{ .RelPermalink | relURL }}" type="{{ .MediaType }}" sizes="192x192">
+{{- else -}}
+<link rel="icon" href="{{ "android-chrome-192x192.png" | relURL }}" type="image/png" sizes="192x192" />
+{{- end }}
+
+{{ with $favicon512x512 -}}
+<link rel="icon" href="{{ .RelPermalink | relURL }}" type="{{ .MediaType }}" sizes="512x512">
+{{- else -}}
+<link rel="icon" href="{{ "android-chrome-512x512.png" | relURL }}" type="image/png" sizes="512x512" />
+{{- end }}
+
+{{ with $faviconAppleTouch -}}
+<link rel="icon" href="{{ .RelPermalink | relURL }}" type="{{ .MediaType }}" sizes="180x180">
+{{- else -}}
+<link rel="icon" href="{{ "apple-touch-icon.png" | relURL }}" type="image/png" sizes="180x180">
+{{- end }}

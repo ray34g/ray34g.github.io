@@ -1,14 +1,10 @@
 # -- Site Configuration --
 
-# theme = ["tetra"]
-# themesDir = "../../"
-
 baseURL = "//www.ray34g.com/"
 
 defaultContentLanguage = "ja"
-# disableLanguages = ["en"]
 
-# canonifyURLs = true
+canonifyURLs = false
 
 enableRobotsTXT = true
 summaryLength = 0
@@ -16,8 +12,7 @@ summaryLength = 0
 buildDrafts = false
 buildFuture = false
 
-# googleAnalytics = "G-XXXXXXXXX"
-# enableGitInfo = true
+enableGitInfo = true
 
 [pagination]
 pagerSize = 12
@@ -29,12 +24,6 @@ posts = "/:section/:year/:month/:slug/"
 date = ["date", "publishDate", ":git", "lastmod"]
 lastmod = ["lastmod", ":git", "date", "publishDate", ":fileModTime"]
 
-[taxonomies]
-# author = "authors"
-# category = "categories"
-# series = "series"
-# tag = "tags"
-
 [sitemap]
 changefreq = "monthly"
 filename = "sitemap.xml"
@@ -43,12 +32,3 @@ priority = 0.5
 [outputs]
 page = ["HTML", "AMP"]
 home = ["HTML", "AMP", "RSS"]
-# home = [ "HTML", "AMP", "RSS", "WebAppManifest" ]
-# section = [ "HTML", "AMP", "RSS" ]
-# taxonomy = [ "HTML", "AMP" ]
-# term = [ "HTML", "AMP", "RSS" ]
-
-# [outputFormats]
-# [outputFormats.WebAppManifest]
-#   baseName = "site"
-#   mediaType = "application/json"
