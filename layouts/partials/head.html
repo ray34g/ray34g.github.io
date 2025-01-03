@@ -1,0 +1,88 @@
+<head>
+    <meta charset="utf-8" />
+    {{- with $.Site.Language.LanguageCode }}
+    <meta http-equiv="content-language" content="{{ . }}" />
+    {{- end }}
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Title -->
+    {{- if .IsHome -}}
+    <title>{{ $.Site.Params.Title | emojify }}</title>
+    <meta name="title" content="{{ $.Site.Params.Title | emojify }}" />
+    {{- else -}}
+    <title>{{ .Title | emojify }} - {{ $.Site.Params.Title | emojify }}</title>
+    <meta name="title" content="{{ .Title | emojify }} - {{ $.Site.Params.Title | emojify }}" />
+    {{- end }}
+
+    <!-- Metadata -->
+    <meta name="description"
+        content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with $.Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+    {{- with union .Params.Tags $.Site.Params.keywords }}
+    <meta name="keywords" content="{{ range . }}{{ . }}, {{ end -}}" />
+    {{- end }}
+    {{- with .Params.author }}
+    <meta name="author" content="{{ . }}">
+    {{- end }}
+    <link rel="author" href="humans.txt" />
+
+    {{ template "_internal/opengraph.html" . -}}
+    {{ template "_internal/twitter_cards.html" . }}
+
+    {{ hugo.Generator }}
+
+    <meta name="robots"
+        content="{{ with .Params.robots }}{{ . }}{{ else }}{{ with $.Site.Params.robots }}{{ . }}{{ else }}all{{ end }}{{ end }}" />
+    <link rel="canonical" href="{{ .Permalink }}" />
+
+    {{- if .PrevInSection -}}
+    <link rel="prev" href="{{ .PrevInSection.Permalink }}" />
+    {{- end }}
+    {{- if .NextInSection -}}
+    <link rel="next" href="{{ .NextInSection.Permalink }}" />
+    {{- end }}
+
+    <!-- Output formats -->
+    {{- range .AlternativeOutputFormats }}
+    <link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .RelPermalink }}"
+        title="{{ ($.Site.Title | emojify) | safeHTML }}" />
+    {{- end }}
+
+    <!-- RSS -->
+    {{- with .OutputFormats.Get "RSS" -}}
+    <link rel="alternate" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ $.Site.Title }}">
+    <link rel="feed" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ $.Site.Title }}">
+    {{- end -}}
+
+    <!-- Google Analytics -->
+    {{/*  {{- template "_internal/google_analytics_async.html" . }}  */}}
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    
+    {{ $mainCSS := resources.Get "/css/style.min.css" }}
+    <link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}?{{ readFile $mainCSS.RelPermalink | md5 }}" media="screen">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- Icons -->
+    
+    {{ if (templates.Exists "partials/favicons.html") }}
+    {{ partialCached "favicons.html" .Site }}
+    {{ else }}
+    <link rel="icon" href="/favicon.ico"> <!--  32x32 and 16x16 -->
+    <link rel="icon" href="{{ "favicon-16x16.png" | relURL }}" type="image/png" sizes="16x16" />
+    <link rel="icon" href="{{ "favicon-32x32.png" | relURL }}" type="image/png" sizes="32x32" />
+    <link rel="icon" href="{{ "android-chrome-192x192.png" | relURL }}" type="image/png" sizes="192x192" />
+    <link rel="icon" href="{{ "android-chrome-512x512.png" | relURL }}" type="image/png" sizes="512x512" />
+    <link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}" type="image/png" sizes="180x180" />
+    {{ end }}
+
+    {{/*  <link rel="manifest" href="{{ "site.webmanifest" | relURL }}" />  */}}
+
+</head>
