@@ -1,0 +1,21 @@
+# -- Languages Japanese --
+weight = 1
+
+languageCode = "ja-JP"
+languageName = "日本語"
+hasCJKLanguage = true
+
+languageDirection = 'ltr'
+
+contentDir = "content/ja"
+
+[params]
+
+title = "ray34g.com"
+description = "Computer graphics and web design."
+
+author = "Go Ray"
+copyright = "Go Ray"
+
+dateFormat = "2006年01月02日"
+numberFormat = "-|.|," # Doc: https://gohugo.io/functions/numfmt/

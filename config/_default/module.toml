@@ -1,0 +1,25 @@
+
+[[mounts]]
+source = 'static'
+target = 'static'
+
+# [[mounts]]
+#   source='static/android-icon-512x512.png'
+#   target='static/android-chrome-512x512.png'
+# [[mounts]]
+#   source='static/android-icon-192x192.png'
+#   target='static/android-chrome-192x192.png'
+# [[mounts]]
+#   source='static/apple-icon-180x180.png'
+#   target='static/apple-touch-icon.png'
+
+# [[mounts]]
+# source = 'data'
+# target = 'data'
+# [[mounts]]
+# source = 'assets'
+# target = 'assets'
+
+# [[mounts]]
+#   source = "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+#   target = "assets/js/bootstrap.bundle.min.js"

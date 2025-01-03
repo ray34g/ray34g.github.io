@@ -1,0 +1,21 @@
+# -- Languages English (US) --
+weight = 10
+
+languageCode = "en-US"
+languageName = "English"
+hasCJKLanguage = false
+
+languageDirection = 'ltr'
+
+contentDir = "content/en"
+
+[params]
+
+title = "ray34g.com"
+description = "Computer graphics and web design."
+
+author = "Go Ray"
+copyright = "Go Ray"
+
+dateFormat = "Mon, January 02, 2006"
+numberFormat = "-|.|," # Doc: https://gohugo.io/functions/numfmt/

@@ -1,0 +1,23 @@
+# -- --
+# These settings are required for the theme to function.
+defaultMarkdownHandler = "goldmark"
+[goldmark]
+  [goldmark.extensions]
+    definitionList = true
+    footnote = true
+    linkify = false
+    strikethrough = true
+    table = true
+    taskList = true
+    typographer = false
+  [goldmark.parser]
+    attribute = true
+    autoHeadingID = true
+    autoHeadingIDType = "github"
+  [goldmark.renderer]
+    hardWraps = true
+    unsafe = true
+    xHTML = false
+[tableOfContents]
+  startLevel = 2
+  endLevel = 4
