@@ -1,6 +1,7 @@
 # Hugo
 themes/
 resources/
+public/
 hugo_stats.json
 
 # Temporary lock file while building
