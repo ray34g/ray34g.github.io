@@ -1,15 +1,15 @@
 # Hugo
-exampleSite/
-themes/*
+themes/
+resources/
 hugo_stats.json
 
 # Temporary lock file while building
 .hugo_build.lock
+.pnpm-store/
 
 # Development packages
 package-lock.json
 node_modules/
-.pnpm-store/
 
 # General
 .DS_Store
