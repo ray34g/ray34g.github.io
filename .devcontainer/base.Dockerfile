@@ -4,7 +4,7 @@ FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:${VARIANT}
 
 # Install tslint, typescript. eslint is installed by javascript image
 ARG NODE_MODULES="tslint-to-eslint-config typescript"
-COPY library-scripts/meta.env /usr/local/etc/vscode-dev-containers
+# COPY library-scripts/meta.env /usr/local/etc/vscode-dev-containers
 RUN su node -c "umask 0002 && npm install -g ${NODE_MODULES}" \
     && npm cache clean --force > /dev/null 2>&1
 
@@ -12,11 +12,11 @@ RUN su node -c "umask 0002 && npm install -g ${NODE_MODULES}" \
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
 ARG HUGO_RELEASE="0.139.3"
-ARG ARCH="linux-amd64"
-RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_RELEASE}/hugo_extended_${HUGO_RELEASE}_${ARCH}.deb" \
+ARG HUGO_ARCH="linux-amd64"
+RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_RELEASE}/hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
     && apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends "./hugo_extended_${HUGO_RELEASE}_${ARCH}.deb" \
-    && rm "./hugo_extended_${HUGO_RELEASE}_${ARCH}.deb"
+    && apt-get -y install --no-install-recommends "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
+    && rm "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb"
     
 ARG DARTSASS_RELEASE="1.83.0"
 ARG DARTSASS_ARCH="linux-x64"
