@@ -27,8 +27,8 @@
 	"mounts": [
 		"source=workspace-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
 	],
-	"postCreateCommand": "sudo chown -R node:node node_modules",
-	"postStartCommand": "whoami && sudo chown -R node:node /${containerWorkspaceFolder}",
+	// "postCreateCommand": "sudo chown -R node:node node_modules",
+	// "postStartCommand": "whoami && sudo chown -R node:node /${containerWorkspaceFolder}",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [1313],
 
