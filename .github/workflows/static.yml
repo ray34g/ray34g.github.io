@@ -69,9 +69,10 @@ jobs:
           HUGO_ENVIRONMENT: production
           TZ: Asia/Tokyo
         run: |
+          git config --global --add safe.directory /__w/ray34g.github.io/ray34g.github.io
           hugo \
             --gc \
-            --minify          
+            --minify
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
