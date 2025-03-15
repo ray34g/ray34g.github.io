@@ -29,7 +29,9 @@ defaults:
 jobs:
   # Build job
   build:
-    runs-on: mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye
+    runs-on: [self-hosted, linux, x64]
+    container:
+      image: mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye
     steps:
       - name: Install Hugo CLI
         env:
