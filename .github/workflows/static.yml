@@ -29,7 +29,9 @@ defaults:
 jobs:
   # Build job
   build:
-    runs-on: ubuntu-24.04
+    runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye
     steps:
       - name: Install Hugo CLI
         env:
@@ -74,11 +76,14 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: './public'
+  # Deploy Job
   deploy:
+    runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: mcr.microsoft.com/vscode/devcontainers/typescript-node:16-bullseye
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-24.04
     needs: build
     steps:
       - name: Deploy to GitHub Pages
