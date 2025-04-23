@@ -54,6 +54,8 @@ RUN npm install -g \
     broken-link-checker \
     @lhci/cli
 
+RUN mkdir -p /home/runner/_work/_tool && \
+    chown -R runner:runner /home/runner
 
 # ----- デフォルトユーザー・作業ディレクトリ -----
 USER runner
