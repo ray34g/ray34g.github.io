@@ -1,0 +1,64 @@
+# GitHub Actions workflow for building static content
+name: Build static site
+
+on:
+  push:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build:
+    runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        id: pages
+
+      - name: Setup Node.js cache
+        uses: actions/setup-node@v4
+        with:
+          cache: 'npm'
+
+      - name: Install project dependencies
+        run: |
+          if [[ -f package-lock.json || -f npm-shrinkwrap.json ]]; then
+            npm ci
+          fi
+
+      - name: Build site with Hugo
+        env:
+          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
+          HUGO_ENVIRONMENT: production
+          TZ: Asia/Tokyo
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          hugo --gc --minify
+
+      - name: Run link checker
+        run: |
+          npm install -g broken-link-checker
+          blc http://localhost:1313/ --filter-level 3 --recursive --verbose || true
+
+      - name: Upload build artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './public'
