@@ -12,5 +12,8 @@ hugo_stats.json
 package-lock.json
 node_modules/
 
+# CI
+.lighthouseci/
+
 # General
 .DS_Store

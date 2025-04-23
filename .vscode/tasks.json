@@ -4,7 +4,24 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "hugo: Start Server",
+            "label": "hugo: Build",
+            "type": "shell",
+            "command": "hugo",
+            "args": [
+                "--gc",
+                "--minify",
+                "--cleanDestinationDir",
+                "--environment=production",
+            ],
+            "presentation": {
+                "reveal": "always",
+            },
+            "group": "build",
+            "isBackground": true,
+            "problemMatcher": []
+        },
+        {
+            "label": "Hugo: Start Server",
             "type": "shell",
             "command": "hugo",
             "args": [
@@ -13,7 +30,7 @@
                 "--disableFastRender",
                 "--ignoreCache",
                 "--noHTTPCache",
-                "--bind='0.0.0.0'",
+                "--bind=0.0.0.0",
                 "--port='1313'",
                 "--appendPort=true",
                 "--liveReloadPort='1313'",
@@ -25,10 +42,7 @@
             "presentation": {
                 "reveal": "always",
             },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
+            "group": "test",
             "isBackground": true,
             "problemMatcher": [
                 {
@@ -47,7 +61,8 @@
                         "beginsPattern": "^Start building .*",
                         "endsPattern": "^", /*Dont match anything*/
                     }
-                },{
+                },
+                {
                     "owner": "hugo",
                     "fileLocation": "absolute",
                     "pattern": {
@@ -68,31 +83,36 @@
             ],
         },
         {
-            "label": "hugo: Stop Server",
-            "type": "shell",
-            "command": "pkill",
-            "args": [
-                "hugo",
-            ]
+          "label": "Hugo: Stop Server",
+          "type": "shell",
+          "command": "pkill",
+          "args": ["hugo"],
+          "group": "none"
         },
         {
-            "label": "hugo: Build",
+            "label": "Audit: Lighthouse CI",
             "type": "shell",
-            "command": "hugo",
+            "command": "lhci",
             "args": [
-                "--gc",
-                "--minify",
-                "--cleanDestinationDir",
-                "--environment=production",
+                "autorun"
             ],
-            "presentation": {
-                "reveal": "always",
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "isBackground": true,
+            "group": "test",
+            "isBackground": false,
+            "problemMatcher": []
+        },
+        {
+            "label": "Audit: Broken Links",
+            "type": "shell",
+            "command": "blc",
+            "args": [
+                "http://localhost:1313/",
+                "--filter-level=3",
+                "--recursive",
+                "--verbose",
+            ],
+
+            "group": "test",
+            "isBackground": false,
             "problemMatcher": []
         },
     ]

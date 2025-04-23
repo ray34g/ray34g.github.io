@@ -1,20 +1,11 @@
 {
-	"name": "Node.js & TypeScript",
+	"name": "GitHub Actions Compatible DevContainer",
 	"build": {
-		"dockerfile": "base.Dockerfile",
-		// Update 'VARIANT' to pick a Node version: 18, 16, 14.
-		// Append -bullseye or -buster to pin to an OS version.
-		// Use -bullseye variants on local on arm64/Apple Silicon.
-		"args": { 
-			"VARIANT": "16-bullseye"
-		}
+		"dockerfile": "base.Dockerfile"
 	},
-
 	// Configure tool-specific properties.
 	"customizations": {
-		// Configure properties specific to VS Code.
 		"vscode": {
-			// Add the IDs of extensions you want installed when the container is created.
 			"extensions": [
 				"tamasfe.even-better-toml",
 				"ms-edgedevtools.vscode-edge-devtools",
@@ -24,17 +15,19 @@
 			]
 		}
 	},
+	// "workspaceFolder": "/home/runner",
 	"mounts": [
 		"source=workspace-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
 	],
-	// "postCreateCommand": "sudo chown -R node:node node_modules",
-	// "postStartCommand": "whoami && sudo chown -R node:node /${containerWorkspaceFolder}",
+	"postCreateCommand": "sudo chown -R runner:runner node_modules",
+	"postStartCommand": "whoami && sudo chown -R runner:runner /${containerWorkspaceFolder}",
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [1313],
-
+	"forwardPorts": [
+		1313
+	],
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "yarn install",
-
 	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
-	"remoteUser": "node"
+	"remoteUser": "runner"
 }
+// echo <YOUR_PAT> | docker login ghcr.io -u <your_username> --password-stdin

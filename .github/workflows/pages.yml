@@ -1,0 +1,85 @@
+name: Build & Deploy static site
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read          # checkout 用
+  pages: write            # ページ公開
+  id-token: write         # OIDC for Pages
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - uses: actions/configure-pages@v5
+
+      - name: Build site with Hugo
+        env:
+          HUGO_CACHEDIR: ${{ runner.temp }}/hugo_cache
+          HUGO_ENVIRONMENT: production
+          TZ: Asia/Tokyo
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          hugo --gc --minify
+
+      - name: Run link checker
+        run: |
+          blc http://localhost:1313/ --filter-level 3 --recursive --verbose || true
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v10
+        with:
+          urls: "http://localhost:1313"
+          uploadArtifacts: false
+          temporaryPublicStorage: false
+          configPath: ".lighthouserc.json"
+
+      - name: Resolve links in public
+        run: |
+          mv public public_orig
+          mkdir -p public
+          # cp -aL public_orig/. public/
+          tar -C public_orig --hard-dereference -cf - . | tar -C public -xf -
+          # rm -rf public
+          # mv public_resolved public
+          echo "Link dereference done"
+
+      - name: Upload github-pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          name: github-pages
+          path: ./public
+
+  # ────────────────────────────────────────────────
+  deploy:
+    needs: build
+    runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+          preview: false
