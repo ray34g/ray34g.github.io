@@ -8,7 +8,7 @@
           {{ $profileImage := resources.GetMatch (.Site.Params.profile.src | default "/images/profile.*") }}
           {{- with $profileImage -}}
           {{- with cond (gt .Width 512) ($profileImage.Resize "512x webp") ($profileImage.Resize (printf "%dx%d webp" .Height .Width)) }}
-          <img class="profile float-md-end" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="Profile Image"
+          <img class="profile float-md-end" src="{{ .RelPermalink }}" fetchpriority="high" width="{{ .Width }}" height="{{ .Height }}" alt="Profile Image"
             style="border-radius: 50%; width: 30vmin; height: auto; max-width: 240px;">
           {{- end -}}
           {{- end -}}
