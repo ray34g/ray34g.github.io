@@ -13,8 +13,8 @@
             "runtimeArgs": [
               "-inprivate"
             ],
-            "preLaunchTask": "hugo: Start Server",
-            "postDebugTask": "hugo: Stop Server"
+            "preLaunchTask": "Hugo: Start Server",
+            "postDebugTask": "Hugo: Stop Server"
         },
     ]
 }
