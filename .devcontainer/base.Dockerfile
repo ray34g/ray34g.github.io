@@ -28,8 +28,8 @@ RUN wget "https://github.com/sass/dart-sass/releases/download/${DARTSASS_RELEASE
     && rm -r ./dart-sass
 
 # ----- UID 1001 の runner ユーザー作成（CI環境と一致） -----
-RUN getent group runner || groupadd -g 1001 runner \
-&& id -u runner >/dev/null 2>&1 || useradd -m -u 1001 -g 1001 runner
+# RUN getent group runner || groupadd -g 1001 runner \
+# && id -u runner >/dev/null 2>&1 || useradd -m -u 1001 -g 1001 runner
 
 # ----- Chromeの依存を明示的にインストール（最小限） -----
 RUN apt-get update && apt-get install -y \
@@ -54,8 +54,8 @@ RUN npm install -g \
     broken-link-checker \
     @lhci/cli
 
-RUN mkdir -p /home/runner/_work/_tool && \
-    chown -R runner:runner /home/runner
+# RUN mkdir -p /home/runner/_work/_tool && \
+#     chown -R runner:runner /home/runner
 
 # ----- デフォルトユーザー・作業ディレクトリ -----
 USER runner

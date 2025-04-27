@@ -16,7 +16,6 @@ concurrency:
 defaults:
   run:
     shell: bash
-
 jobs:
   build:
     runs-on: ray34g-cluster-g-arc-runner-set
@@ -31,18 +30,6 @@ jobs:
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
-        id: pages
-
-      - name: Setup Node.js cache
-        uses: actions/setup-node@v4
-        with:
-          cache: 'npm'
-
-      - name: Install project dependencies
-        run: |
-          if [[ -f package-lock.json || -f npm-shrinkwrap.json ]]; then
-            npm ci
-          fi
 
       - name: Build site with Hugo
         env:
@@ -55,7 +42,6 @@ jobs:
 
       - name: Run link checker
         run: |
-          npm install -g broken-link-checker
           blc http://localhost:1313/ --filter-level 3 --recursive --verbose || true
 
       - name: Run Lighthouse CI
