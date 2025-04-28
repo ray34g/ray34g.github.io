@@ -25,7 +25,7 @@ jobs:
       - name: Set run ID
         id: set-run-id
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
             echo "RUN_ID=${{ github.event.inputs.build_run_id }}" >> $GITHUB_ENV
           else
             echo "RUN_ID=${{ github.event.workflow_run.id }}" >> $GITHUB_ENV
