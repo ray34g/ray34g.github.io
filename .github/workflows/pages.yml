@@ -1,35 +1,32 @@
-# GitHub Actions workflow for building static content
-name: Build static site
+name: Build & Deploy static site
 
 on:
   push:
-    branches: ["main"]
+    branches: [ main ]
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: read          # checkout 用
+  pages: write            # ページ公開
+  id-token: write         # OIDC for Pages
 
 concurrency:
   group: "pages"
   cancel-in-progress: false
 
-defaults:
-  run:
-    shell: bash
 jobs:
   build:
     runs-on: ray34g-cluster-g-arc-runner-set
     container:
       image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+      - uses: actions/configure-pages@v5
 
       - name: Build site with Hugo
         env:
@@ -51,11 +48,27 @@ jobs:
           uploadArtifacts: false
           temporaryPublicStorage: false
           configPath: ".lighthouserc.json"
-          artifactName: "lighthouse-results"
 
-      - name: Upload build artifact
+      - name: Upload github-pages artifact
         uses: actions/upload-artifact@v4
         with:
           name: github-pages
           path: ./public
           if-no-files-found: error
+
+  # ────────────────────────────────────────────────
+  deploy:
+    needs: build
+    runs-on: ray34g-cluster-g-arc-runner-set
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
+          preview: false
