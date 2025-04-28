@@ -58,13 +58,12 @@ jobs:
           # rm -rf public
           # mv public_resolved public
           echo "Link dereference done"
-          
+
       - name: Upload github-pages artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-pages-artifact@v3
         with:
           name: github-pages
           path: ./public
-          if-no-files-found: error
 
   # ────────────────────────────────────────────────
   deploy:
