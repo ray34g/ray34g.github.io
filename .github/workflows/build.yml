@@ -48,9 +48,10 @@ jobs:
         uses: treosh/lighthouse-ci-action@v10
         with:
           urls: "http://localhost:1313"
-          uploadArtifacts: true
-          temporaryPublicStorage: true
+          uploadArtifacts: false
+          temporaryPublicStorage: false
           configPath: ".lighthouserc.json"
+          artifactName: "lighthouse-results"
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3
