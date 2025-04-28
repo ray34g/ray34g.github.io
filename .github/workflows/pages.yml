@@ -49,6 +49,16 @@ jobs:
           temporaryPublicStorage: false
           configPath: ".lighthouserc.json"
 
+      - name: Resolve links in public
+        run: |
+          mv public public_orig
+          mkdir -p public
+          # cp -aL public_orig/. public/
+          tar -C public_orig --hard-dereference -cf - . | tar -C public -xf -
+          # rm -rf public
+          # mv public_resolved public
+          echo "Link dereference done"
+          
       - name: Upload github-pages artifact
         uses: actions/upload-artifact@v4
         with:
