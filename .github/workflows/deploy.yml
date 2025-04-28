@@ -32,15 +32,15 @@ jobs:
             echo "RUN_ID=${{ github.event.workflow_run.id }}" >> $GITHUB_ENV
           fi
 
-      - name: Download github-pages artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: github-pages
-          path: ./public
-          run-id: ${{ env.RUN_ID }}
-          repository: ray34g/ray34g.github.io
-          merge-multiple: false
-
+      - name: Debug list artifacts via API
+        env:
+          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ env.RUN_ID }}
+        run: |
+          curl -s -H "Authorization: Bearer $GH_PAT" \
+                -H "Accept: application/vnd.github+json" \
+                "https://api.github.com/repos/ray34g/ray34g.github.io/actions/runs/${RUN_ID}/artifacts" \
+                | jq '.'
       - name: Download github-pages artifact
         uses: actions/download-artifact@v4
         with:
@@ -49,3 +49,5 @@ jobs:
           repository: ray34g/ray34g.github.io
           path: ./public
           token: ${{ secrets.GITHUB_TOKEN }}
+          merge-multiple: false
+          if-no-files-found: error
