@@ -18,6 +18,8 @@ jobs:
   deploy:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ray34g-cluster-g-arc-runner-set
+    container:
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
