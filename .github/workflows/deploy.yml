@@ -40,8 +40,11 @@ jobs:
           repository: ray34g/ray34g.github.io
           merge-multiple: false
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Download github-pages artifact
+        uses: actions/download-artifact@v4
         with:
+          name: github-pages
+          run-id: ${{ env.RUN_ID }}
+          repository: ray34g/ray34g.github.io
           path: ./public
+          token: ${{ secrets.GITHUB_TOKEN }}
