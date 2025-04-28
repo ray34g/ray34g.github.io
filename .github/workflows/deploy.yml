@@ -5,25 +5,41 @@ on:
     workflows: ["Build static site"]
     types:
       - completed
+  workflow_dispatch:
+    inputs:
+      build_run_id:
+        description: 'Build workflow run ID to fetch artifacts from'
+        required: true
 
 permissions:
+  contents: read
   pages: write
   id-token: write
 
-concurrency:
-  group: "pages"
-  cancel-in-progress: false
-
 jobs:
   deploy:
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ray34g-cluster-g-arc-runner-set
     container:
       image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Set run ID
+        id: set-run-id
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "RUN_ID=${{ github.event.inputs.build_run_id }}" >> $GITHUB_ENV
+          else
+            echo "RUN_ID=${{ github.event.workflow_run.id }}" >> $GITHUB_ENV
+          fi
+
+      - name: Download github-pages artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: github-pages
+          run-id: ${{ env.RUN_ID }}
+          path: ./public
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          path: ./public
