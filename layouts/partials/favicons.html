@@ -8,9 +8,17 @@
 {{ $faviconAppleTouch := resources.Get (.Params.favicons.faviconAppleTouch | default "/images/apple-touch-icon.png") }}
 
 {{ with $faviconSVG -}}
-<link rel="icon" href="{{ $favicon.RelPermalink | relURL }}">
+<link rel="icon" href="{{ .RelPermalink | relURL }}">
 {{- else -}}
-<link rel="icon" href="/favicon.ico">
+{{ with $favicon -}}
+    {{ with resources.Copy "/favicon.ico" . }}
+        <link rel="icon" href="{{ .RelPermalink | relURL }}">
+    {{- else -}}
+        <link rel="icon" href="{{ .RelPermalink | relURL }}">
+    {{ end }}
+    {{- else -}}
+    <link rel="icon" href="/favicon.ico">
+    {{- end }}<!--  32x32 and 16x16 -->
 {{- end }}<!--  32x32 and 16x16 -->
 
 {{ with $faviconSVG -}}
