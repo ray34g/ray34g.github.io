@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   build:
-    runs-on: ray34g-cluster-g-arc-runner-set
+    runs-on: gha-runner-scale-set-ray34g-github-io
     container:
       image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
 
@@ -68,7 +68,7 @@ jobs:
   # ────────────────────────────────────────────────
   deploy:
     needs: build
-    runs-on: ray34g-cluster-g-arc-runner-set
+    runs-on: gha-runner-scale-set-ray34g-github-io
     container:
       image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
     environment:
