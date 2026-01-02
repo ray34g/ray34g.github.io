@@ -6,6 +6,6 @@ Tokyo, JAPAN
 
 ## License
 
-2025 (c) Go Ray / @ray34g
+2025-2026 (c) Go Ray / @ray34g
 
 Licensed under the MIT License. See LICENSE in the project root for license information.
