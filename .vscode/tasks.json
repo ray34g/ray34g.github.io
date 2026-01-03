@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "hugo: Build",
+            "label": "Hugo: Build",
             "type": "shell",
             "command": "hugo",
             "args": [
@@ -112,6 +112,36 @@
             ],
 
             "group": "test",
+            "isBackground": false,
+            "problemMatcher": []
+        },
+        {
+            "label": "Container: Build",
+            "type": "shell",
+            "command": "podman",
+            "args": [
+                "build",
+                "-t",
+                "ghcr.io/ray34g/arc-runner-node-hugo:0.154.2",
+                "./.devcontainer/",
+                "-f",
+                "base.Dockerfile",
+            ],
+
+            "group": "none",
+            "isBackground": false,
+            "problemMatcher": []
+        },
+        {
+            "label": "Container: Push",
+            "type": "shell",
+            "command": "podman",
+            "args": [
+                "push",
+                "ghcr.io/ray34g/arc-runner-node-hugo:0.154.2",
+            ],
+
+            "group": "none",
             "isBackground": false,
             "problemMatcher": []
         },
