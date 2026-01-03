@@ -11,20 +11,28 @@
 				"ms-edgedevtools.vscode-edge-devtools",
 				"github.vscode-github-actions",
 				"ms-azuretools.vscode-docker",
-				"dbaeumer.vscode-eslint"
+				"dbaeumer.vscode-eslint",
+				"saoudrizwan.claude-dev"
 			]
 		}
 	},
+	"forwardPorts": [
+		1313
+	],
 	"mounts": [
 		"source=workspace-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
 		"source=workspace-npm-cache,target=${containerWorkspaceFolder}/.npm,type=volume",
 		"source=workspace-hugo-cache,target=${containerWorkspaceFolder}/.cache/hugo,type=volume"
 	],
-  "postCreateCommand": "sudo chown -R runner:runner ${containerWorkspaceFolder}/.npm ${containerWorkspaceFolder}/.cache/hugo ${containerWorkspaceFolder}/node_modules || true",
+	"portsAttributes": {
+		"1313": {
+			"label": "Hugo",
+			"onAutoForward": "openBrowser",
+			"protocol": "http"
+		}
+	},
+	"postCreateCommand": "sudo chown -R runner:runner ${containerWorkspaceFolder}/.npm ${containerWorkspaceFolder}/.cache/hugo ${containerWorkspaceFolder}/node_modules || true",
 	"postStartCommand": "whoami",
-	"forwardPorts": [
-		1313
-	],
 	"remoteUser": "runner"
-}
 // echo <YOUR_PAT> | podman login ghcr.io -u <your_username> --password-stdin
+}

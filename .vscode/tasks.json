@@ -90,7 +90,7 @@
           "group": "none"
         },
         {
-            "label": "Audit: Lighthouse CI",
+            "label": "Test: Lighthouse CI",
             "type": "shell",
             "command": "lhci",
             "args": [
@@ -101,11 +101,11 @@
             "problemMatcher": []
         },
         {
-            "label": "Audit: Broken Links",
+            "label": "Test: Broken Links",
             "type": "shell",
             "command": "blc",
             "args": [
-                "http://localhost:1314/",
+                "http://localhost:1313/",
                 "--filter-level=2",
                 "--exclude-external",
                 "--recursive",

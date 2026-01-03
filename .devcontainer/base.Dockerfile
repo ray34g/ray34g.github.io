@@ -1,69 +1,60 @@
-FROM ghcr.io/actions/actions-runner:2.325.0
-
+FROM ghcr.io/actions/actions-runner:2.325.0 AS base
 USER root
 
-# ----- Node.js 24 + VSCode向けツール -----
 ARG NODE_VERSION=24
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
-    && apt-get update \
-    && apt-get install -y nodejs wget tar \
-    && rm -rf /var/lib/apt/lists/* \
-    && npm install -g tslint-to-eslint-config typescript eslint \
-    && npm cache clean --force > /dev/null 2>&1
-
-# ----- Hugo (Extended) のインストール -----
 ARG HUGO_RELEASE="0.154.2"
 ARG HUGO_ARCH="linux-amd64"
-RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_RELEASE}/hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
-    && apt-get install -y "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
-    && rm "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb"
 
-# ----- Dart Sass のインストール -----
-ARG DARTSASS_RELEASE="1.97.1"
-ARG DARTSASS_ARCH="linux-x64"
-RUN wget "https://github.com/sass/dart-sass/releases/download/${DARTSASS_RELEASE}/dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz" \
-    && tar -x -C ./ -f dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz \
-    && mkdir -p /opt/dart-sass \
-    && cp -r ./dart-sass/* /opt/dart-sass/ \
-    && ln -sf /opt/dart-sass/sass /usr/local/bin/sass \
-    && rm dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz \
-    && rm -r ./dart-sass
-
-# ----- UID 1001 の runner ユーザー作成（CI環境と一致） -----
-# RUN getent group runner || groupadd -g 1001 runner \
-# && id -u runner >/dev/null 2>&1 || useradd -m -u 1001 -g 1001 runner
-
-# ----- Chromeの依存を明示的にインストール（最小限） -----
-RUN apt-get update && apt-get install -y \
-    wget gnupg ca-certificates fonts-liberation \
-    libasound2 libatk-bridge2.0-0 libc6 libnspr4 libnss3 \
-    libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
-    xdg-utils libu2f-udev libvulkan1 ripgrep fd-find jq git\
-    --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates curl gnupg wget tar unzip zip \
+    git rsync tree build-essential \
+    jq ripgrep fd-find \
+    procps iproute2 lsof netcat-openbsd dnsutils \
  && rm -rf /var/lib/apt/lists/*
 
-# ----- Google Chrome 安定版を追加 -----
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
+ && apt-get update && apt-get install -y --no-install-recommends nodejs \
+ && rm -rf /var/lib/apt/lists/* \
+ && npm install -g typescript eslint \
+ && npm cache clean --force > /dev/null 2>&1
+
+RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_RELEASE}/hugo_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
+ && apt-get update && apt-get install -y "./hugo_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
+ && rm -rf /var/lib/apt/lists/* \
+ && rm "./hugo_${HUGO_RELEASE}_${HUGO_ARCH}.deb"
+
+USER runner
+WORKDIR /home/runner
+
+# --- devcontainer ---
+FROM base AS dev
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    shellcheck \
+ && rm -rf /var/lib/apt/lists/*
+USER runner
+
+# --- runner ---
+FROM base AS runner
+USER root
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    fonts-liberation \
+    libasound2 libatk-bridge2.0-0 libc6 libnspr4 libnss3 \
+    libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
+    xdg-utils libu2f-udev libvulkan1 \
+ && rm -rf /var/lib/apt/lists/*
+
 RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /usr/share/keyrings/google-chrome.gpg \
  && echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" \
     > /etc/apt/sources.list.d/google-chrome.list \
- && apt-get update && apt-get install -y google-chrome-stable \
+ && apt-get update && apt-get install -y --no-install-recommends google-chrome-stable \
  && rm -rf /var/lib/apt/lists/*
 
- ENV CHROME_PATH=/usr/bin/google-chrome
+ENV CHROME_PATH=/usr/bin/google-chrome
 
-# ----- Lighthouseとリンクチェッカーを追加 -----
-RUN npm install -g \
-    broken-link-checker \
-    @lhci/cli
+RUN npm install -g broken-link-checker @lhci/cli \
+ && npm cache clean --force > /dev/null 2>&1
 
-# ----- 開発ツールセットを追加 -----
-RUN apt-get update && apt-get install -y \
-    ripgrep fd-find jq git\
-    --no-install-recommends \
- && rm -rf /var/lib/apt/lists/*
-# RUN mkdir -p /home/runner/_work/_tool && \
-#     chown -R runner:runner /home/runner
-
-# ----- デフォルトユーザー・作業ディレクトリ -----
 USER runner
 WORKDIR /home/runner
