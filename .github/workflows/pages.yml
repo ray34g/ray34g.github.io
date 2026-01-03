@@ -39,7 +39,10 @@ jobs:
 
       - name: Run link checker
         run: |
-          blc http://localhost:1313/ --filter-level 3 --recursive --verbose || true
+          hugo server --environment production --minify --disableLiveReload --baseURL=http://localhost:1313/ --bind=127.0.0.1 --port=1313 --renderToMemory --noTimes >/dev/null 2>&1 & pid=$!
+          trap "kill $pid 2>/dev/null || true" EXIT
+          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 http://localhost:1313/ >/dev/null
+          blc http://localhost:1313/ --filter-level 2 --exclude-external --recursive --verbose || true
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10

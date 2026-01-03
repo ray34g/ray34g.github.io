@@ -1,9 +1,9 @@
-FROM ghcr.io/actions/actions-runner:2.323.0
+FROM ghcr.io/actions/actions-runner:2.325.0
 
 USER root
 
-# ----- Node.js 16 + VSCode向けツール -----
-ARG NODE_VERSION=20
+# ----- Node.js 24 + VSCode向けツール -----
+ARG NODE_VERSION=24
 RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && apt-get update \
     && apt-get install -y nodejs wget tar \
@@ -12,18 +12,20 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
     && npm cache clean --force > /dev/null 2>&1
 
 # ----- Hugo (Extended) のインストール -----
-ARG HUGO_RELEASE="0.139.3"
+ARG HUGO_RELEASE="0.154.2"
 ARG HUGO_ARCH="linux-amd64"
 RUN wget "https://github.com/gohugoio/hugo/releases/download/v${HUGO_RELEASE}/hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
     && apt-get install -y "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb" \
     && rm "./hugo_extended_${HUGO_RELEASE}_${HUGO_ARCH}.deb"
 
 # ----- Dart Sass のインストール -----
-ARG DARTSASS_RELEASE="1.83.0"
+ARG DARTSASS_RELEASE="1.97.1"
 ARG DARTSASS_ARCH="linux-x64"
 RUN wget "https://github.com/sass/dart-sass/releases/download/${DARTSASS_RELEASE}/dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz" \
     && tar -x -C ./ -f dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz \
-    && cp -r ./dart-sass/* /usr/local/bin \
+    && mkdir -p /opt/dart-sass \
+    && cp -r ./dart-sass/* /opt/dart-sass/ \
+    && ln -sf /opt/dart-sass/sass /usr/local/bin/sass \
     && rm dart-sass-${DARTSASS_RELEASE}-${DARTSASS_ARCH}.tar.gz \
     && rm -r ./dart-sass
 
@@ -36,7 +38,7 @@ RUN apt-get update && apt-get install -y \
     wget gnupg ca-certificates fonts-liberation \
     libasound2 libatk-bridge2.0-0 libc6 libnspr4 libnss3 \
     libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 \
-    xdg-utils libu2f-udev libvulkan1 \
+    xdg-utils libu2f-udev libvulkan1 ripgrep fd-find jq git\
     --no-install-recommends \
  && rm -rf /var/lib/apt/lists/*
 
@@ -54,6 +56,11 @@ RUN npm install -g \
     broken-link-checker \
     @lhci/cli
 
+# ----- 開発ツールセットを追加 -----
+RUN apt-get update && apt-get install -y \
+    ripgrep fd-find jq git\
+    --no-install-recommends \
+ && rm -rf /var/lib/apt/lists/*
 # RUN mkdir -p /home/runner/_work/_tool && \
 #     chown -R runner:runner /home/runner
 

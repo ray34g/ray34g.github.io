@@ -1,7 +1,7 @@
 {
     "ci": {
       "collect": {
-      "startServerCommand": "hugo server --environment production --minify --disableLiveReload --baseURL=http://localhost:1313/ --bind=127.0.0.1 --port=1313 --cleanDestinationDir --noTimes",
+      "startServerCommand": "hugo server --environment production --minify --disableLiveReload --baseURL=http://localhost:1313/ --bind=127.0.0.1 --port=1313 --renderToMemory --noTimes",
         "url": ["http://localhost:1313"],
         "numberOfRuns": 3,
         "startServerReadyPattern": "Web Server is available",
