@@ -24,15 +24,8 @@
 		"source=workspace-npm-cache,target=${containerWorkspaceFolder}/.npm,type=volume",
 		"source=workspace-hugo-cache,target=${containerWorkspaceFolder}/.cache/hugo,type=volume"
 	],
-	"portsAttributes": {
-		"1313": {
-			"label": "Hugo",
-			"onAutoForward": "openBrowser",
-			"protocol": "http"
-		}
-	},
 	"postCreateCommand": "sudo chown -R runner:runner ${containerWorkspaceFolder}/.npm ${containerWorkspaceFolder}/.cache/hugo ${containerWorkspaceFolder}/node_modules || true",
-	"postStartCommand": "whoami",
+	"postStartCommand": "whoami && npm install",
 	"remoteUser": "runner"
-// echo <YOUR_PAT> | podman login ghcr.io -u <your_username> --password-stdin
+	// echo <YOUR_PAT> | podman login ghcr.io -u <your_username> --password-stdin
 }

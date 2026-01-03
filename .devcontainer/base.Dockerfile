@@ -51,7 +51,10 @@ RUN wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | gpg --dearm
  && apt-get update && apt-get install -y --no-install-recommends google-chrome-stable \
  && rm -rf /var/lib/apt/lists/*
 
-ENV CHROME_PATH=/usr/bin/google-chrome
+ENV CHROME_PATH=/usr/bin/google-chrome \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome \
+    PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_TMP_DIR=/tmp
 
 RUN npm install -g broken-link-checker @lhci/cli \
  && npm cache clean --force > /dev/null 2>&1
