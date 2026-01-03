@@ -15,19 +15,16 @@
 			]
 		}
 	},
-	// "workspaceFolder": "/home/runner",
 	"mounts": [
-		"source=workspace-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume"
+		"source=workspace-node_modules,target=${containerWorkspaceFolder}/node_modules,type=volume",
+		"source=workspace-npm-cache,target=${containerWorkspaceFolder}/.npm,type=volume",
+		"source=workspace-hugo-cache,target=${containerWorkspaceFolder}/.cache/hugo,type=volume"
 	],
-	"postCreateCommand": "sudo chown -R runner:runner node_modules",
-	"postStartCommand": "whoami && sudo chown -R runner:runner /${containerWorkspaceFolder}",
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+  "postCreateCommand": "sudo chown -R runner:runner ${containerWorkspaceFolder}/.npm ${containerWorkspaceFolder}/.cache/hugo ${containerWorkspaceFolder}/node_modules || true",
+	"postStartCommand": "whoami",
 	"forwardPorts": [
 		1313
 	],
-	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "yarn install",
-	// Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	"remoteUser": "runner"
 }
-// echo <YOUR_PAT> | docker login ghcr.io -u <your_username> --password-stdin
+// echo <YOUR_PAT> | podman login ghcr.io -u <your_username> --password-stdin

@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: gha-runner-scale-set-ray34g-github-io
     container:
-      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.154.2
 
     steps:
       - uses: actions/checkout@v4
@@ -35,11 +35,14 @@ jobs:
           TZ: Asia/Tokyo
         run: |
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          hugo --gc --minify
+          hugo --gc --minify --cleanDestinationDir --environment production
 
       - name: Run link checker
         run: |
-          blc http://localhost:1313/ --filter-level 3 --recursive --verbose || true
+          hugo server --environment production --minify --disableLiveReload --baseURL=http://localhost:1314/ --bind=127.0.0.1 --port=1314 --renderToMemory --noTimes >/dev/null 2>&1 & pid=$!
+          trap "kill $pid 2>/dev/null || true" EXIT
+          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 http://localhost:1314/ >/dev/null
+          blc http://localhost:1314/ --filter-level 2 --exclude-external --recursive --verbose || true
 
       - name: Run Lighthouse CI
         uses: treosh/lighthouse-ci-action@v10
@@ -70,7 +73,7 @@ jobs:
     needs: build
     runs-on: gha-runner-scale-set-ray34g-github-io
     container:
-      image: ghcr.io/ray34g/arc-runner-node-hugo:0.139.3
+      image: ghcr.io/ray34g/arc-runner-node-hugo:0.154.2
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}
