@@ -44,7 +44,7 @@
         {{ range $menu.secondary }}
         <li class="nav-item">
           <a class="nav-link" href="{{ .url }}" title='{{ i18n .i18n_key }}' {{ if .external }}target="_blank" rel="noopener"{{ end }}>
-            {{ with .icon_class }}<span class="{{ . }}" aria-hidden="true"></span>{{ else }}{{ i18n $.i18n_key }}{{ end }}
+            {{ with .icon_class }}<span class="{{ . }}" aria-hidden="true"></span>{{ else }}{{ i18n .i18n_key }}{{ end }}
           </a>
         </li>
         {{ end }}
