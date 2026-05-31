@@ -1,0 +1,16 @@
+<a class="navbar-brand" href="{{ .Site.BaseURL | relLangURL }}" name="home" title="{{- .Site.Params.title -}}">
+  {{ $logoImage := resources.GetMatch (.Site.Params.header.logo.src | default "/images/logo.*") }}
+  {{ $logoClass := .Site.Params.header.logo.class }}
+  {{- with $logoImage -}}
+  {{- with cond (gt .Width 512) ($logoImage.Resize "512x webp") ($logoImage.Resize (printf "%dx%d webp" .Height .Width)) }}
+  <img class="logo {{- with $logoClass }} {{ . }}{{ end }} w-auto mh-100 align-text-top" src="{{ .RelPermalink }}" width="{{ .Width }}" height="{{ .Height }}" alt="" style="border-radius: 50%; width: 2rem!important; height: auto;">
+  {{- end -}}
+  {{- end -}}
+  <span class="logo px-2">
+    {{- with .Site.Params.header.title -}}
+    {{ . }}
+    {{- else -}}
+    {{ .Site.Params.title | safeHTML }}
+    {{- end -}}
+  </span>
+</a>
