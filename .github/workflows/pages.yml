@@ -2,7 +2,7 @@ name: Build & Deploy static site
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, develop ]
   workflow_dispatch:
 
 permissions:
@@ -76,6 +76,7 @@ jobs:
 
   # ────────────────────────────────────────────────
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: gha-runner-scale-set-ray34g-github-io
     container:
