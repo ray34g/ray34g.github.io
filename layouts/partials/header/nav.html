@@ -1,18 +1,19 @@
 <div class="collapse navbar-collapse" id="mainMenu">
+  {{ $menu := site.Data.navigation.main }}
   <ul class="navbar-nav">
+    {{ range $menu.primary }}
     <li class="nav-item">
-      <a class="nav-link{{ if .IsHome }} active{{ end }}" href="{{ "/" | relLangURL }}" title="Home"{{ if .IsHome }} aria-current="page"{{ end }}>Home</a>
+      <a class='nav-link {{ if eq .id "home" }}active{{ end }}' href='{{ .url | relLangURL }}' title='{{ i18n .i18n_key }}' {{ if eq .id "home" }}aria-current="page"{{ end }}>{{ i18n .i18n_key }}</a>
     </li>
-    <li class="nav-item">
-      {{ $notes := site.GetPage "section" "notes" }}
-      <a class="nav-link{{ if eq .Section "notes" }} active{{ end }}" href="{{ with $notes }}{{ .RelPermalink }}{{ else }}{{ "notes/" | relLangURL }}{{ end }}" title="Notes"{{ if eq .Section "notes" }} aria-current="page"{{ end }}>Notes</a>
-    </li>
+    {{ end }}
   </ul>
   <ul class="navbar-nav ms-auto">
+    {{ range $menu.secondary }}
     <li class="nav-item">
-      <a class="nav-link" href="https://github.com/ray34g/ray34g.github.io" title="GitHub" target="_blank">
-        <span class="inline fa-brands fa-github fa-lg" aria-hidden="true"></span>
+      <a class="nav-link" href="{{ .url }}" title='{{ i18n .i18n_key }}' {{ if .external }}target="_blank" rel="noopener"{{ end }}>
+        {{ with .icon_class }}<span class="{{ . }}" aria-hidden="true"></span>{{ else }}{{ i18n .i18n_key }}{{ end }}
       </a>
     </li>
+    {{ end }}
   </ul>
 </div>

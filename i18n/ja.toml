@@ -1,0 +1,14 @@
+[nav_home]
+other = "ホーム"
+
+[nav_notes]
+other = "ノート"
+
+[nav_github]
+other = "GitHub"
+
+[footer_powered_by]
+other = "Powered by Hugo"
+
+[a11y_main_navigation]
+other = "メインナビゲーション"

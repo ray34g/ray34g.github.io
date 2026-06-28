@@ -30,6 +30,10 @@
 <meta name="robots"
     content="{{ with .Params.robots }}{{ . }}{{ else }}{{ with $.Site.Params.robots }}{{ . }}{{ else }}all{{ end }}{{ end }}" />
 <link rel="canonical" href="{{ .Permalink }}" />
+{{- range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}" />
+{{- end }}
+<link rel="alternate" hreflang="x-default" href="{{ .Permalink }}" />
 
 {{- if .PrevInSection -}}
 <link rel="prev" href="{{ .PrevInSection.Permalink }}" />

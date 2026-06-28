@@ -17,7 +17,7 @@ fi
 keys_file="$(mktemp)"
 missing=0
 
-rg -No 'i18n_key\s*=\s*"([^"]+)"' data --replace '$1' | sort -u > "${keys_file}" || true
+rg -No 'i18n_key\s*=\s*"([^"]+)"' data --replace '$1' | cut -d: -f2- | sort -u > "${keys_file}" || true
 
 if [[ ! -s "${keys_file}" ]]; then
   echo "[i18n] no i18n_key references found in data/*.toml"

@@ -1,0 +1,16 @@
+[[primary]]
+id = "home"
+url = "/"
+i18n_key = "nav_home"
+
+[[primary]]
+id = "notes"
+url = "/notes/"
+i18n_key = "nav_notes"
+
+[[secondary]]
+id = "github"
+url = "https://github.com/ray34g/ray34g.github.io"
+i18n_key = "nav_github"
+icon_class = "inline fa-brands fa-github fa-lg"
+external = true
