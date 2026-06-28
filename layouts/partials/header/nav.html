@@ -1,0 +1,18 @@
+<div class="collapse navbar-collapse" id="mainMenu">
+  <ul class="navbar-nav">
+    <li class="nav-item">
+      <a class="nav-link{{ if .IsHome }} active{{ end }}" href="{{ "/" | relLangURL }}" title="Home"{{ if .IsHome }} aria-current="page"{{ end }}>Home</a>
+    </li>
+    <li class="nav-item">
+      {{ $notes := site.GetPage "section" "notes" }}
+      <a class="nav-link{{ if eq .Section "notes" }} active{{ end }}" href="{{ with $notes }}{{ .RelPermalink }}{{ else }}{{ "notes/" | relLangURL }}{{ end }}" title="Notes"{{ if eq .Section "notes" }} aria-current="page"{{ end }}>Notes</a>
+    </li>
+  </ul>
+  <ul class="navbar-nav ms-auto">
+    <li class="nav-item">
+      <a class="nav-link" href="https://github.com/ray34g/ray34g.github.io" title="GitHub" target="_blank">
+        <span class="inline fa-brands fa-github fa-lg" aria-hidden="true"></span>
+      </a>
+    </li>
+  </ul>
+</div>

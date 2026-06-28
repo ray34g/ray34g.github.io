@@ -1,0 +1,10 @@
+{{ if (templates.Exists "partials/favicons.html") }}
+{{ partialCached "favicons.html" .Site }}
+{{ else }}
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" href="{{ "favicon-16x16.png" | relURL }}" type="image/png" sizes="16x16" />
+<link rel="icon" href="{{ "favicon-32x32.png" | relURL }}" type="image/png" sizes="32x32" />
+<link rel="icon" href="{{ "android-chrome-192x192.png" | relURL }}" type="image/png" sizes="192x192" />
+<link rel="icon" href="{{ "android-chrome-512x512.png" | relURL }}" type="image/png" sizes="512x512" />
+<link rel="apple-touch-icon" href="{{ "apple-touch-icon.png" | relURL }}" type="image/png" sizes="180x180" />
+{{ end }}

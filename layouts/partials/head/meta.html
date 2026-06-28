@@ -1,0 +1,49 @@
+<meta charset="utf-8" />
+{{- with $.Site.Language.Locale }}
+<meta http-equiv="content-language" content="{{ . }}" />
+{{- end }}
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+{{- if .IsHome -}}
+<title>{{ $.Site.Params.Title | emojify }}</title>
+<meta name="title" content="{{ $.Site.Params.Title | emojify }}" />
+{{- else -}}
+<title>{{ .Title | emojify }} - {{ $.Site.Params.Title | emojify }}</title>
+<meta name="title" content="{{ .Title | emojify }} - {{ $.Site.Params.Title | emojify }}" />
+{{- end }}
+
+<meta name="description"
+    content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with $.Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}" />
+{{- with union .Params.Tags $.Site.Params.keywords }}
+<meta name="keywords" content="{{ range . }}{{ . }}, {{ end -}}" />
+{{- end }}
+{{- with .Params.author }}
+<meta name="author" content="{{ . }}">
+{{- end }}
+<link rel="author" href="humans.txt" />
+
+{{ template "_internal/opengraph.html" . -}}
+{{ template "_internal/twitter_cards.html" . }}
+
+{{ hugo.Generator }}
+
+<meta name="robots"
+    content="{{ with .Params.robots }}{{ . }}{{ else }}{{ with $.Site.Params.robots }}{{ . }}{{ else }}all{{ end }}{{ end }}" />
+<link rel="canonical" href="{{ .Permalink }}" />
+
+{{- if .PrevInSection -}}
+<link rel="prev" href="{{ .PrevInSection.Permalink }}" />
+{{- end }}
+{{- if .NextInSection -}}
+<link rel="next" href="{{ .NextInSection.Permalink }}" />
+{{- end }}
+
+{{- range .AlternativeOutputFormats }}
+<link rel="{{ .Rel }}" type="{{ .MediaType.Type }}" href="{{ .RelPermalink }}"
+    title="{{ ($.Site.Title | emojify) | safeHTML }}" />
+{{- end }}
+
+{{- with .OutputFormats.Get "RSS" -}}
+<link rel="alternate" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ $.Site.Title }}">
+<link rel="feed" href="{{ .RelPermalink }}" type="application/rss+xml" title="{{ $.Site.Title }}">
+{{- end -}}
