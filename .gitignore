@@ -30,6 +30,13 @@ pnpm-debug.log*
 /.lighthouseci/
 /.cache/
 /.turbo/
+/.report-build/
+
+# Visual diff report images are generated and can be large.
+/static/reports/visual-diff-current/assets/
+/public/reports/*/screenshots/
+/public/reports/*/diffs/
+/public/reports/*/*.zip
 
 # ------------------------------------------------------------
 # Environment / secrets (never commit)

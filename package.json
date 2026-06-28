@@ -9,6 +9,11 @@
     "build:preview": "HUGO_ENVIRONMENT=preview ci/scripts/build_pages.sh public-preview",
     "verify:pages": "ci/scripts/verify_pages.sh public",
     "check:i18n": "ci/scripts/check_i18n_keys.sh",
+    "render-report": "node scripts/render-report.mjs",
+    "build-diff-report": "npm run build-diff-report:local",
+    "build-diff-report:local": "bash scripts/build-local-diff-report.sh",
+    "visual:diff": "npm run render-report",
+    "visual:diff:local": "npm run build-diff-report:local",
     "serve": "hugo server --environment development --disableFastRender --bind=0.0.0.0 --port=1313",
     "lhci": "lhci autorun",
     "check:links": "blc http://localhost:1313/ --filter-level 2 --exclude-external --recursive --verbose",
@@ -17,8 +22,9 @@
   "author": "",
   "license": "",
   "devDependencies": {
+    "pixelmatch": "^7.2.0",
+    "playwright-core": "^1.60.0",
+    "pngjs": "^7.0.0",
     "puppeteer": "^24.34.0"
-  },
-  "dependencies": {
   }
 }
