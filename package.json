@@ -5,6 +5,10 @@
   "main": "index.js",
   "scripts": {
     "build": "hugo --gc --minify --cleanDestinationDir --environment production",
+    "build:pages": "ci/scripts/build_pages.sh public",
+    "build:preview": "HUGO_ENVIRONMENT=preview ci/scripts/build_pages.sh public-preview",
+    "verify:pages": "ci/scripts/verify_pages.sh public",
+    "check:i18n": "ci/scripts/check_i18n_keys.sh",
     "serve": "hugo server --environment development --disableFastRender --bind=0.0.0.0 --port=1313",
     "lhci": "lhci autorun",
     "check:links": "blc http://localhost:1313/ --filter-level 2 --exclude-external --recursive --verbose",

@@ -1,0 +1,5 @@
+# Preview overrides
+# Replace this value in CI or deployment context when needed.
+baseURL = "https://preview.ray34g.com/"
+buildDrafts = false
+buildFuture = false
