@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "hugo --gc --minify --cleanDestinationDir --environment production",
+    "serve": "hugo server --environment development --disableFastRender --bind=0.0.0.0 --port=1313",
+    "lhci": "lhci autorun",
+    "check:links": "blc http://localhost:1313/ --filter-level 2 --exclude-external --recursive --verbose",
+    "test": "npm run build"
   },
   "author": "",
   "license": "",

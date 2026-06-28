@@ -37,6 +37,9 @@ pnpm-debug.log*
 .env.*
 !.env.example
 
+# Private planning notes for this public repository.
+/_private/
+
 # ------------------------------------------------------------
 # Editor / OS junk
 # ------------------------------------------------------------

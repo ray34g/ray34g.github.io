@@ -1,25 +1,34 @@
 {
-  "name": "ray34g.github.io",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "name": "${localWorkspaceFolderBasename}",
+  "dockerComposeFile": [
+    "docker-compose.yml"
+  ],
+  "service": "workspace",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "remoteUser": "root",
+  "initializeCommand": "bash .devcontainer/scripts/initializeCommand.sh",
+  "postCreateCommand": "bash .devcontainer/scripts/postCreateCommand.sh",
+  "forwardPorts": [1313, 1314],
+  "portsAttributes": {
+    "1313": {
+      "label": "Hugo Dev Server",
+      "onAutoForward": "notify"
+    },
+    "1314": {
+      "label": "Nginx Static Preview",
+      "onAutoForward": "notify"
+    }
   },
-  "author": "ray34g",
-  "license": "MIT",
-  "devDependencies": {
-    "@awmottaz/prettier-plugin-void-html": "~2.0.0",
-    "@tailwindcss/cli": "~4.1.18",
-    "@tailwindcss/typography": "~0.5.19",
-    "prettier": "~3.7.4",
-    "prettier-plugin-go-template": "~0.0.15",
-    "puppeteer": "^24.34.0",
-    "tailwindcss": "~4.1.18"
-  },
-  "dependencies": {
-    "@alpinejs/focus": "~3.15.3",
-    "@alpinejs/persist": "~3.15.3",
-    "alpinejs": "~3.15.3"
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "remote.autoForwardPorts": true,
+        "remote.restoreForwardedPorts": true,
+        "remote.localPortHost": "localhost"
+      },
+      "extensions": [
+      ]
+    }
   }
 }

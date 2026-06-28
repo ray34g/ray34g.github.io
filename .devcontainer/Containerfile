@@ -1,20 +1,22 @@
 FROM ghcr.io/actions/actions-runner:2.325.0 AS base
 USER root
 
-ARG NODE_VERSION=24
-ARG HUGO_RELEASE="0.154.2"
+ARG NODE_VERSION="24.18.0"
+ARG NODE_ARCH="linux-x64"
+ARG HUGO_RELEASE="0.163.3"
 ARG HUGO_ARCH="linux-amd64"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    ca-certificates curl gnupg wget tar unzip zip \
+    ca-certificates curl gnupg wget tar unzip zip xz-utils \
     git rsync tree build-essential \
     jq ripgrep fd-find \
     procps iproute2 lsof netcat-openbsd dnsutils \
+    openssh-client tmux vim \
  && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_VERSION}.x | bash - \
- && apt-get update && apt-get install -y --no-install-recommends nodejs \
- && rm -rf /var/lib/apt/lists/* \
+RUN wget "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-${NODE_ARCH}.tar.xz" \
+ && tar -xJf "node-v${NODE_VERSION}-${NODE_ARCH}.tar.xz" -C /usr/local --strip-components=1 \
+ && rm "node-v${NODE_VERSION}-${NODE_ARCH}.tar.xz" \
  && npm install -g typescript eslint \
  && npm cache clean --force > /dev/null 2>&1
 
@@ -32,7 +34,7 @@ USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \
     shellcheck \
  && rm -rf /var/lib/apt/lists/*
-USER runner
+USER root
 
 # --- runner ---
 FROM base AS runner
