@@ -90,7 +90,7 @@
           "group": "none"
         },
         {
-            "label": "Audit: Lighthouse CI",
+            "label": "Test: Lighthouse CI",
             "type": "shell",
             "command": "lhci",
             "args": [
@@ -101,11 +101,11 @@
             "problemMatcher": []
         },
         {
-            "label": "Audit: Broken Links",
+            "label": "Test: Broken Links",
             "type": "shell",
             "command": "blc",
             "args": [
-                "http://localhost:1314/",
+                "http://localhost:1313/",
                 "--filter-level=2",
                 "--exclude-external",
                 "--recursive",
@@ -123,10 +123,10 @@
             "args": [
                 "build",
                 "-t",
-                "ghcr.io/ray34g/arc-runner-node-hugo:0.154.2",
-                "./.devcontainer/",
+                "ghcr.io/ray34g/arc-runner-node-hugo:node24.18.0-hugo0.163.3",
                 "-f",
-                "base.Dockerfile",
+                ".devcontainer/Containerfile",
+                ".",
             ],
 
             "group": "none",
@@ -139,7 +139,7 @@
             "command": "podman",
             "args": [
                 "push",
-                "ghcr.io/ray34g/arc-runner-node-hugo:0.154.2",
+                "ghcr.io/ray34g/arc-runner-node-hugo:node24.18.0-hugo0.163.3",
             ],
 
             "group": "none",

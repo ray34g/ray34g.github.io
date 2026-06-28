@@ -1,0 +1,4 @@
+# Development overrides
+baseURL = "http://localhost:1313/"
+buildDrafts = true
+buildFuture = true

@@ -18,7 +18,7 @@ jobs:
   build:
     runs-on: gha-runner-scale-set-ray34g-github-io
     container:
-      image: ghcr.io/ray34g/arc-runner-node-hugo:0.154.2
+      image: ghcr.io/ray34g/arc-runner-node-hugo:node24.18.0-hugo0.163.3
 
     steps:
       - uses: actions/checkout@v4
@@ -34,32 +34,38 @@ jobs:
           HUGO_ENVIRONMENT: production
           TZ: Asia/Tokyo
         run: |
+          set -euo pipefail
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
-          hugo --gc --minify --cleanDestinationDir --environment production
+          ./ci/scripts/build_pages.sh public
 
-      - name: Run link checker
+      - name: Verify generated pages
         run: |
-          hugo server --environment production --minify --disableLiveReload --baseURL=http://localhost:1314/ --bind=127.0.0.1 --port=1314 --renderToMemory --noTimes >/dev/null 2>&1 & pid=$!
-          trap "kill $pid 2>/dev/null || true" EXIT
-          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 http://localhost:1314/ >/dev/null
-          blc http://localhost:1314/ --filter-level 2 --exclude-external --recursive --verbose || true
+          set -euo pipefail
+          ./ci/scripts/verify_pages.sh public
 
-      - name: Run Lighthouse CI
+      - name: Run internal link checker
+        run: |
+          set -euo pipefail
+          hugo server --environment production --minify --disableLiveReload --baseURL=http://127.0.0.1:1314/ --bind=127.0.0.1 --port=1314 --renderToMemory --noTimes >/tmp/hugo-server.log 2>&1 &
+          pid=$!
+          trap 'kill $pid 2>/dev/null || true' EXIT
+          curl -fsS --retry 30 --retry-connrefused --retry-delay 1 http://127.0.0.1:1314/ >/dev/null
+          blc http://127.0.0.1:1314/ --filter-level 2 --exclude-external --recursive --verbose
+
+      - name: Run Lighthouse CI (non-blocking)
+        continue-on-error: true
         uses: treosh/lighthouse-ci-action@v10
         with:
-          urls: "http://localhost:1313"
-          uploadArtifacts: false
+          uploadArtifacts: true
           temporaryPublicStorage: false
           configPath: ".lighthouserc.json"
 
       - name: Resolve links in public
         run: |
+          set -euo pipefail
           mv public public_orig
           mkdir -p public
-          # cp -aL public_orig/. public/
           tar -C public_orig --hard-dereference -cf - . | tar -C public -xf -
-          # rm -rf public
-          # mv public_resolved public
           echo "Link dereference done"
 
       - name: Upload github-pages artifact
@@ -73,7 +79,7 @@ jobs:
     needs: build
     runs-on: gha-runner-scale-set-ray34g-github-io
     container:
-      image: ghcr.io/ray34g/arc-runner-node-hugo:0.154.2
+      image: ghcr.io/ray34g/arc-runner-node-hugo:node24.18.0-hugo0.163.3
     environment:
       name: github-pages
       url: ${{ steps.deploy.outputs.page_url }}

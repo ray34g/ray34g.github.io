@@ -1,11 +1,11 @@
 # -- Languages Japanese --
 weight = 1
 
-languageCode = "ja-JP"
-languageName = "日本語"
+locale = "ja-JP"
+label = "日本語"
 hasCJKLanguage = true
 
-languageDirection = 'ltr'
+direction = 'ltr'
 
 contentDir = "content/ja"
 
