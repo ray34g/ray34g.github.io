@@ -36,8 +36,10 @@ async function main() {
   const browser = await launchBrowser();
 
   try {
-    const baselineFiles = (await findHtmlFiles(baselineDir)).filter(shouldCompareHtml);
-    const candidateFiles = new Set((await findHtmlFiles(candidateDir)).filter(shouldCompareHtml));
+    const baselineHtml = await findComparableHtmlFiles(baselineDir);
+    const candidateHtml = await findComparableHtmlFiles(candidateDir);
+    const baselineFiles = baselineHtml.files;
+    const candidateFiles = new Set(candidateHtml.files);
     const commonFiles = baselineFiles.filter((file) => candidateFiles.has(file)).sort();
     const missingInCandidate = baselineFiles.filter((file) => !candidateFiles.has(file)).sort();
     const extraInCandidate = [...candidateFiles].filter((file) => !baselineFiles.includes(file)).sort();
@@ -82,6 +84,10 @@ async function main() {
       },
       missingInCandidate,
       extraInCandidate,
+      skipped: {
+        baselineRedirects: baselineHtml.skippedRedirects,
+        candidateRedirects: candidateHtml.skippedRedirects,
+      },
       results: rows,
     };
 
@@ -126,6 +132,22 @@ async function findHtmlFiles(dir, prefix = '') {
   return files.flat();
 }
 
+async function findComparableHtmlFiles(dir) {
+  const files = [];
+  const skippedRedirects = [];
+
+  for (const file of await findHtmlFiles(dir)) {
+    if (!shouldCompareHtml(file)) continue;
+    if (await isRedirectOnlyHtml(path.join(dir, file))) {
+      skippedRedirects.push(file);
+      continue;
+    }
+    files.push(file);
+  }
+
+  return { files: files.sort(), skippedRedirects: skippedRedirects.sort() };
+}
+
 function routeForHtmlFile(file) {
   if (file === 'index.html') return '/';
   if (file.endsWith('/index.html')) return `/${file.slice(0, -'index.html'.length)}`;
@@ -137,6 +159,11 @@ function shouldCompareHtml(file) {
     if (file.startsWith(prefix)) return false;
   }
   return true;
+}
+
+async function isRedirectOnlyHtml(filePath) {
+  const html = await readFile(filePath, 'utf8');
+  return /<meta\s+[^>]*http-equiv=["']?refresh["']?[^>]*>/i.test(html);
 }
 
 function slugForRoute(routePath) {
@@ -314,6 +341,10 @@ function contentType(filePath) {
 }
 
 function renderHtml(report) {
+  const skippedRedirectCount = new Set([
+    ...(report.skipped?.baselineRedirects ?? []),
+    ...(report.skipped?.candidateRedirects ?? []),
+  ]).size;
   const rows = report.results.map((row) => `
         <tr>
           <td><a href="${escapeHtml(row.path)}">${escapeHtml(row.path)}</a></td>
@@ -364,6 +395,7 @@ function renderHtml(report) {
       <dt>Compared</dt><dd>${report.summary.compared}</dd>
       <dt>Changed</dt><dd>${report.summary.changed}</dd>
       <dt>Passed</dt><dd>${report.summary.passed}</dd>
+      <dt>Skipped redirects</dt><dd>${skippedRedirectCount}</dd>
       <dt>Viewport</dt><dd>${report.viewport.width}x${report.viewport.height}</dd>
       <dt>Baseline</dt><dd>${escapeHtml(report.baselineDir)}</dd>
       <dt>Candidate</dt><dd>${escapeHtml(report.candidateDir)}</dd>

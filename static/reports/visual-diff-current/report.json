@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-06-28T13:13:49.599Z",
+  "generatedAt": "2026-06-28T13:23:43.960Z",
   "baselineDir": "public",
   "candidateDir": "public-preview",
   "viewport": {
@@ -8,14 +8,22 @@
   },
   "threshold": 0.1,
   "summary": {
-    "compared": 5,
-    "changed": 1,
+    "compared": 4,
+    "changed": 0,
     "passed": 4,
     "missingInCandidate": 0,
     "extraInCandidate": 0
   },
   "missingInCandidate": [],
   "extraInCandidate": [],
+  "skipped": {
+    "baselineRedirects": [
+      "ja/index.html"
+    ],
+    "candidateRedirects": [
+      "ja/index.html"
+    ]
+  },
   "results": [
     {
       "path": "/amp/",
@@ -103,28 +111,6 @@
         "baseline": "assets/root-42099b4a-baseline.png",
         "candidate": "assets/root-42099b4a-candidate.png",
         "diff": "assets/root-42099b4a-diff.png"
-      }
-    },
-    {
-      "path": "/ja/",
-      "source": "ja/index.html",
-      "status": "changed",
-      "width": 1440,
-      "height": 1200,
-      "baselineSize": {
-        "width": 1440,
-        "height": 1200
-      },
-      "candidateSize": {
-        "width": 1440,
-        "height": 1200
-      },
-      "diffPixels": 377,
-      "diffRatio": 0.000218,
-      "assets": {
-        "baseline": "assets/ja-ab9eb71e-baseline.png",
-        "candidate": "assets/ja-ab9eb71e-candidate.png",
-        "diff": "assets/ja-ab9eb71e-diff.png"
       }
     }
   ]
