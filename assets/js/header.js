@@ -1,0 +1,20 @@
+(function () {
+  const mainHeaderElement = document.getElementById("mainHeader");
+  if (!mainHeaderElement) return;
+
+  window.addEventListener("scroll", () => {
+    if (window.scrollY > 0) {
+      mainHeaderElement.classList.add("scrolling");
+    } else {
+      mainHeaderElement.classList.remove("scrolling");
+    }
+  });
+
+  const setVh = () => {
+    const vh = window.innerHeight * 0.01;
+    document.documentElement.style.setProperty("--vh", `${vh}px`);
+  };
+
+  window.addEventListener("load", setVh);
+  window.addEventListener("resize", setVh);
+})();

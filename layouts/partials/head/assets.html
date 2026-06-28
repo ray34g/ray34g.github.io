@@ -1,7 +1,7 @@
 {{ $bootstrapCSS := resources.Get "/css/vendor/bootstrap/bootstrap.min.css" }}
 <link rel="stylesheet" href="{{ $bootstrapCSS.RelPermalink }}">
 
-{{ $mainCSS := resources.Get "css/style.min.css" | fingerprint }}
+{{ $mainCSS := resources.Get "css/style.css" | fingerprint }}
 <link rel="stylesheet" href="{{ $mainCSS.RelPermalink }}" integrity="{{ $mainCSS.Data.Integrity }}" crossorigin="anonymous">
 
 {{ with resources.Get "css/portfolio.css" }}
