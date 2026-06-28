@@ -49,3 +49,16 @@ Licensed under the MIT License. See LICENSE in the project root for license info
 - `docs/operations/03-incident-template.md`
 - `docs/operations/04-content-guidelines.md`
 - `docs/theme/outline.md`
+
+## Environment-specific commands
+
+```bash
+# development
+hugo server --environment development
+
+# preview build
+hugo --environment preview
+
+# production build
+hugo --environment production
+```
