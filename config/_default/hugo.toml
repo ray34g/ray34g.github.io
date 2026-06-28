@@ -25,6 +25,10 @@ date = ["date", "publishDate", ":git", "lastmod"]
 lastmod = ["lastmod", ":git", "date", "publishDate", ":fileModTime"]
 
 [taxonomies]
+tech = "techs"
+role = "roles"
+capability = "capabilities"
+context = "contexts"
 
 [sitemap]
 changefreq = "monthly"

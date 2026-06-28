@@ -1,0 +1,48 @@
+.notes-hero {
+  padding-top: 7rem;
+  padding-bottom: 3rem;
+  background: #17202a;
+}
+
+.notes-page {
+  padding-top: 6rem;
+}
+
+.note-meta {
+  color: #6c757d;
+  font-size: 0.925rem;
+}
+
+.note-taxonomy {
+  gap: 0.4rem;
+}
+
+.note-taxonomy a {
+  text-decoration: none;
+}
+
+.note-card {
+  border-radius: 0.5rem;
+}
+
+.note-card:hover {
+  border-color: rgba(13, 110, 253, 0.45);
+}
+
+.note-body {
+  line-height: 1.85;
+}
+
+.note-body h2 {
+  margin-top: 2.5rem;
+}
+
+.note-body h3 {
+  margin-top: 2rem;
+}
+
+.note-body pre {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  background: #f6f8fa;
+}
