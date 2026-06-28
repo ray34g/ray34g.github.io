@@ -1,0 +1,38 @@
+{{ define "main" }}
+<main class="notes-list">
+  <section class="notes-hero text-light">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8">
+          <p class="text-uppercase small mb-2">Engineering Notes</p>
+          <h1 class="display-5">{{ .Title }}</h1>
+          {{ with .Content }}
+          <div class="lead">{{ . }}</div>
+          {{ end }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row g-4">
+        {{ range .Pages.ByDate.Reverse }}
+        <article class="col-12">
+          <div class="note-card border p-4 h-100">
+            <div class="note-meta mb-2">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (.Site.Params.dateFormat | default "2006-01-02") }}</time>
+            </div>
+            <h2 class="h3"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+            {{ with .Description }}
+            <p class="mb-3">{{ . }}</p>
+            {{ end }}
+            {{ partial "notes/taxonomy-badges.html" . }}
+          </div>
+        </article>
+        {{ end }}
+      </div>
+    </div>
+  </section>
+</main>
+{{ end }}
