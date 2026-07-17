@@ -1,92 +1,79 @@
-# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms@0.170.7/schema/sveltia-cms.json
+# yaml-language-server: $schema=https://unpkg.com/@sveltia/cms@0.171.1/schema/sveltia-cms.json
 
 backend:
   name: github
   repo: ray34g/ray34g-personal-website
   branch: main
+  # Replace with [oauth] and add base_url after the private OAuth broker is deployed.
+  auth_methods: [token]
   squash_merges: true
 
-# A local proxy changes only the working tree. Production authentication uses
-# a short-lived, least-privilege GitHub token for this single-maintainer site.
-local_backend:
-  url: http://localhost:8081/api/v1
-
-publish_mode: editorial_workflow
 site_url: https://www.ray34g.com
 display_url: https://www.ray34g.com
-logo_url: /images/icon.svg
-media_folder: static/uploads
-public_folder: /uploads
+logo:
+  src: /images/icon.svg
+  show_in_header: true
+media_folder: assets/images
+public_folder: /images
 
-i18n:
-  structure: multiple_files
-  locales: [ja, en]
-  default_locale: ja
+output:
+  omit_empty_optional_fields: true
 
-collections:
-  - name: posts
-    label: Posts
-    label_singular: Post
-    description: Multilingual posts stored as Hugo leaf bundles.
-    folder: content/posts
-    path: '{{slug}}/index'
-    extension: md
-    format: yaml-frontmatter
-    create: true
-    delete: true
-    i18n: true
-    media_folder: ''
-    public_folder: ''
-    slug: '{{slug}}'
-    summary: '{{title}} — {{date}}'
-    sortable_fields: [title, date, commit_date]
-    view_filters:
-      - label: Drafts
-        field: draft
-        pattern: true
+singletons:
+  - name: home_ja
+    label: 1. トップページ（日本語）
+    icon: home
+    file: content/_index.ja.md
+    media_folder: /assets/images
+    public_folder: /images
+    fields: &home_fields
+      - { name: title, label: Title / ページタイトル, widget: string }
+      - { name: linkTitle, label: Navigation label / ナビゲーション表示, widget: string }
+      - { name: weight, label: Weight, widget: hidden, default: 1 }
+      - { name: layout, label: Layout, widget: hidden, default: home }
+      - label: Hero / メインビジュアル
+        name: hero
+        widget: object
+        collapsed: false
+        fields:
+          - { name: heading, label: Heading / 見出し, widget: string }
+          - { name: name, label: Name / 表示名, widget: string }
+          - { name: description, label: Description / 説明, widget: text }
+          - name: profile
+            label: Profile image / プロフィール画像
+            widget: image
+            hint: 正方形の画像を使用してください。
+          - name: background
+            label: Background image / 背景画像
+            widget: image
+            hint: 横長の画像を推奨します。
+      - label: Home sections / 表示セクション
+        name: home_sections
+        widget: object
+        collapsed: true
+        fields:
+          - { name: about, label: About, widget: boolean, default: false }
+          - { name: latest_posts, label: Latest posts, widget: boolean, default: false }
+      - { name: body, label: Body / 補足本文, widget: markdown, required: false }
+
+  - name: home_en
+    label: 2. Home page (English)
+    icon: home
+    file: content/_index.en.md
+    media_folder: /assets/images
+    public_folder: /images
+    fields: *home_fields
+
+  - divider: true
+
+  - name: brand
+    label: 3. Brand links / ブランド情報
+    icon: brand_awareness
+    file: data/site/brand.toml
+    format: toml
     fields:
-      - name: title
-        label: Title
-        widget: string
-        i18n: true
-      - name: date
-        label: Published at
-        widget: datetime
-        format: YYYY-MM-DD
-        date_format: YYYY-MM-DD
-        time_format: false
-        i18n: duplicate
-      - name: draft
-        label: Draft
-        widget: boolean
-        default: true
-        required: false
-        i18n: duplicate
-      - name: description
-        label: Description
-        widget: text
-        i18n: true
-      - name: techs
-        label: Technologies
-        widget: list
-        required: false
-        i18n: duplicate
-      - name: roles
-        label: Roles
-        widget: list
-        required: false
-        i18n: duplicate
-      - name: capabilities
-        label: Capabilities
-        widget: list
-        required: false
-        i18n: duplicate
-      - name: contexts
-        label: Contexts
-        widget: list
-        required: false
-        i18n: duplicate
-      - name: body
-        label: Body
-        widget: markdown
-        i18n: true
+      - { name: copyright_name, label: Copyright name, widget: string }
+      - { name: copyright_url, label: Copyright URL, widget: string, pattern: ['^https://.+', 'https:// で始まるURLを入力してください'] }
+      - { name: github_url, label: GitHub URL, widget: string, pattern: ['^https://.+', 'https:// で始まるURLを入力してください'] }
+      - { name: powered_by_url, label: Powered-by URL, widget: string, pattern: ['^https://.+', 'https:// で始まるURLを入力してください'] }
+      - { name: powered_by_label, label: Powered-by label, widget: string }
