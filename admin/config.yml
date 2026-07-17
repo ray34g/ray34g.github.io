@@ -46,7 +46,8 @@ singletons:
           - name: background
             label: Background image / 背景画像
             widget: image
-            hint: 横長の画像を推奨します。
+            required: false
+            hint: 任意。横長の画像、または将来のアニメーションSVGを指定できます。未指定時はプライマリカラーになります。
       - label: Home sections / 表示セクション
         name: home_sections
         widget: object
